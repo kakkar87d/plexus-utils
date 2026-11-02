@@ -1247,7 +1247,9 @@ public class FileUtils extends BaseFileUtils {
         }
         directory.deleteOnExit(); // The hook reverses the list
 
-        cleanDirectoryOnExit(directory);
+        if (!NioFiles.isSymbolicLink(directory)) {
+            cleanDirectoryOnExit(directory);
+        }
     }
 
     /**
@@ -1343,7 +1345,9 @@ public class FileUtils extends BaseFileUtils {
             return;
         }
 
-        cleanDirectory(directory);
+        if (!NioFiles.isSymbolicLink(directory)) {
+            cleanDirectory(directory);
+        }
         if (!directory.delete()) {
             final String message = "Directory " + directory + " unable to be deleted.";
             throw new IOException(message);
